@@ -31,6 +31,7 @@ public class TFTstart extends Thread{
 			try {
 				allMsg = in.readUTF();
 			}catch(IOException e) {
+				System.out.println("스레드 종료");
 				return;
 			};
 			line = new StringTokenizer(allMsg, "$");

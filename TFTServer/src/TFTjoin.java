@@ -21,6 +21,8 @@ public class TFTjoin {
 		String sign = null; //클라이언트 신호
 		String next = null; //다음 메시지
 		String IDName = null; // 입력된 아이디
+		String TFTName = null; // 입력된 TFT 닉네임
+		String PWdate = null; // 입력된 비밀번호
 		
 		try {
 			out = new DataOutputStream(sock.getOutputStream());
@@ -37,18 +39,72 @@ public class TFTjoin {
 			line = new StringTokenizer(allMsg, "$");
 			sign = line.nextToken();
 			next = line.nextToken();
-			if(sign.equals("IDCONTROL")) { //아이디 중복확인
-				String Control = null;
+			if(sign.equals("JOINSTART")) { //입력 아이디와 TFT 아이디 입력 확인
+				String IDControl = null;
+				String TFTControl = null;
 				line = new StringTokenizer(next, "&&");
-				Control = line.nextToken();
-				IDName = Control;
-				// DB의 DQL로 검증
-				// 성공 : 아무거나
+				IDControl = line.nextToken();
+				PWdate = line.nextToken();
+				TFTName = line.nextToken();
+				
+				IDName = IDControl; //아이디 보관
+				TFTName = TFTControl; //닉네임 보관
+				
+				// DB의 SQL로 검증
+				// 성공 : 아무거나 or 입력한 아이디 명
 				// 실패 : CONTROLSUCCESS
-				// Control = (SQL);
-				if(Control.equals("CONTROLSUCCESS")) {
+				// IDControl = (SQL);
+				
+				if(IDControl.equals("CONTROLSUCCESS")) {
 					try {
-						out.writeUTF("USEDID$");
+						out.writeUTF("USEDID$"); //중복 아이디 
+					}catch(IOException e) {}
+				}else {
+					try {
+						out.writeUTF("USEPLAY$"); //사용 가능
+					}catch(IOException e) {}
+				}
+				
+				// API를 통한 검증
+				// 성공 : 아무거나 or 입
+				// 실패 : FAILNICK
+				// TFTControl = API 결과 값 저장
+				
+				if(TFTControl.equals("FAILNICK")) {
+					try {
+						out.writeUTF("FAILNICK$"); //닉네임 찾기 실패
+					}catch(IOException e) {}
+					
+				}else {
+					try {
+						out.writeUTF("CLEARNICK$"); //닉네임 찾기 성공
+					}catch(IOException e) {}
+				}
+				
+				// 가입 작업 종료 메시지
+				try {
+					out.writeUTF("JOBCLEAR$"); //확인 명령
+				}catch(IOException e) {}
+				
+				
+			}else if(sign.equals("TERMOK")) { //가입 절차 진행
+				String JOINCUT = "JOINFALE";
+				// 아이디 : IDName
+				// 비밀번호 : PWdate
+				// TFT닉네임 : TFTName
+				
+				//DB에 저장 SQL 작성
+				// 성공 : JOINOK
+				// 실패 : JOINFALE
+				
+				if(JOINCUT.equals("JOINOK")) { //가입 성공
+					try {// 가입 성공
+						out.writeUTF("JOINSUCCESS$"); //가입 성공 전달
+					}catch(IOException e) {}
+					
+				}else { // 가입 실패 - DB 문제
+					try {
+						out.writeUTF("JOINFALE$"); //가입 실패 전달
 					}catch(IOException e) {}
 				}
 				
