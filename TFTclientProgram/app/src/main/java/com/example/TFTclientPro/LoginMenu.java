@@ -54,7 +54,6 @@ public class LoginMenu extends AppCompatActivity {
                     in = new BufferedReader(inputStreamReader);*/
                     out = new DataOutputStream(client.getOutputStream());
                     in = new DataInputStream(client.getInputStream());
-                    publishProgress("0");
                 }catch (IOException e){}
             }
 
@@ -114,7 +113,9 @@ public class LoginMenu extends AppCompatActivity {
             super.onPostExecute(commend);
             if(commend.equals("LOGINSUCCESS")){ // 로그인 성공 처리
                 Intent intent = new Intent(getApplicationContext(), SearchMenu.class);
+                MyData.Login = true;
                 startActivity(intent); //페이지 이동
+                //intent.putExtra("login", true); // 회원 시작 전달
                 /*
                 추가 작업 필요 시(다음 페이지로 정보 전달)
                 방법 : 발신 : intent.putExtra("이름", "전달 값");
@@ -122,6 +123,8 @@ public class LoginMenu extends AppCompatActivity {
                              String name = intent.getExtras.getString("이름");
                 */
             }
+
+            finish();
         }
 
         @Override

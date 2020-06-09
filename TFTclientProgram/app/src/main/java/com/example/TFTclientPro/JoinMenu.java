@@ -16,6 +16,7 @@ public class JoinMenu extends AppCompatActivity {
     public Socket client;
     public DataInputStream in;
     public DataOutputStream out;
+    JoinManager joinPage;
     //public PrintWriter out; //서버에 출력하기 위한 스트림
     //public BufferedReader in; //입력 스트림
     StringTokenizer line; //문자 메시지 구분자
@@ -30,8 +31,15 @@ public class JoinMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-        JoinManager joinPage = new JoinManager();
+        joinPage = new JoinManager();
         joinPage.execute();
+    }
+
+    public void onBackPressed() { //뒤로 가기 버튼
+        try{
+            out.writeUTF("ENDPAGE$"); // 종료 메시지
+        }catch (IOException e){}
+        joinPage.cancel(true); // 이전 액티비티로
     }
 
     public class JoinManager extends AsyncTask<Void, String, String> {
@@ -56,7 +64,6 @@ public class JoinMenu extends AppCompatActivity {
                     in = new BufferedReader(inputStreamReader);*/
                     out = new DataOutputStream(client.getOutputStream());
                     in = new DataInputStream(client.getInputStream());
-                    publishProgress("0");
                 }catch (IOException e){}
             }
 
@@ -167,11 +174,15 @@ public class JoinMenu extends AppCompatActivity {
                              String name = intent.getExtras.getString("이름");
                 */
             }
+            finish();
         }
 
         @Override
-        protected void onCancelled() { // 동작 종료 시 발생
+        protected void onCancelled() { // 동작 종료 시 발생 -- 뒤로가기
             super.onCancelled();
+            Intent intent = new Intent(getApplicationContext(), StartMenu.class);
+            startActivity(intent); //페이지 이동
+            finish(); //액티비티 삭제
         }
 
     }

@@ -57,7 +57,7 @@ public class TFTstart extends Thread{
 					out.writeUTF("DESTARTMOVE$"); //바로 시작 메시지
 				}catch(IOException e) {}
 				TFTMenu mainMenu = new TFTMenu(sock);
-				mainMenu.startMenu();
+				mainMenu.SearchMenu();
 				
 			}else {
 				try {

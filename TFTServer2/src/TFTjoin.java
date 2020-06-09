@@ -109,9 +109,11 @@ public class TFTjoin {
 				}
 				
 			}else if(sign.equals("ENDPAGE")) { //나가기 요구
+				/*
 				try {
 					out.writeUTF("ENDPAGE$"); // 시작 페이지 이동
 				}catch(IOException e) {}
+				*/
 				return;
 				
 			}else { // 잘못된 입력 처리

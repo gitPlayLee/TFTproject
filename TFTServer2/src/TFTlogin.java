@@ -65,7 +65,7 @@ public class TFTlogin {
 					try {
 						out.writeUTF("LOGINSUCCESS$"); //로그인 성공 메시지
 					}catch(IOException e) {}
-					mainMenu.startMenu(); // 페이지 동작
+					mainMenu.SearchMenu(); // 페이지 동작
 					
 				}else { //로그인 실패
 					try {

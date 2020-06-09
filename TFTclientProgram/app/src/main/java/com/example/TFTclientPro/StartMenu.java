@@ -24,7 +24,6 @@ public class StartMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_start);
 
         startManager startPage = new startManager();
         startPage.execute();
@@ -108,6 +107,7 @@ public class StartMenu extends AppCompatActivity {
 
             }else if(commend.equals("DESTARTMOVE")){ //비회원 시작
                 Intent intent = new Intent(getApplicationContext(), SearchMenu.class);
+                intent.putExtra("login", false); //비회원 시작 전달
                 startActivity(intent);
                 /*
                 추가 작업 필요 시(다음 페이지로 정보 전달)
@@ -116,6 +116,8 @@ public class StartMenu extends AppCompatActivity {
                              String name = intent.getExtras.getString("이름");
                 */
             }
+
+            finish();
         }
 
         @Override
